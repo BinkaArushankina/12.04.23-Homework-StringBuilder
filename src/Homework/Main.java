@@ -3,6 +3,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class Main {
     public static void main(String[] args) throws  IOException{
@@ -23,12 +25,13 @@ public class Main {
 
     }
     //1)Write a method to read a text file into a String using StringBuilder class
-    public static String text(File file )throws IOException {
+    public static String text(File file)throws IOException {
         StringBuilder text= new StringBuilder();
         try(BufferedReader br= new BufferedReader(new FileReader(file))){
             String line;
             while ((line=br.readLine()) != null){
-                text.append(line);
+                text.append(line).append(" ");
+                //text.append(System.lineSeparator());
             }
         }
         return new String(text).trim();              //aa bbb cccc ddddd
@@ -42,22 +45,40 @@ public class Main {
     }
     public static String reverseWord (String str){
         StringBuilder sb = new StringBuilder();
-        String[] word= str.split(" ");
-
+        String[] word= str.trim().split(" ");
+        //Collections.reverse(Arrays.asList(word));  //bes pomoschi StringBuilder
         for(int i= word.length-1; i>=0; i-- ){
-            sb.append(word[i]).append(" ");
+            if(!word[i].isEmpty()) {           //element sostojaschij is probelow to on ne sachodit w if
+                sb.append(word[i]).append(" ");
+            }
         }
-        return new String(sb);                      //great is today weather The
+        return new String(sb).trim();                      //great is today weather The
     }
 
     //3)Write a method to convert a string of lowercase letters into a string counting the number of these letters for each letter
     public static String repeat(String str){
+        if(str.length() == 0)return "";
         StringBuilder sb= new StringBuilder();
+        int counter=1;
 
-        for(int i=0; i<str.length(); i++) {
-
+        for(int i=1; i<str.length(); i++) {
+            if (str.charAt(i-1) != str.charAt(i)) {//for natschinaem s 1.     0 index srawniwaem s 2 indexom
+                if (counter>1){//snatschit bilo powtorenie
+                    sb.append(counter).append(str.charAt(i-1));
+                    counter = 1;
+                }else{
+                    sb.append(str.charAt(i-1));//esli w if ne saschol snatschit on odinotschnij, ego woswr. bes zifri
+                }
+            }else {
+                counter++;
+            }
         }
-        return new String(sb);
+        if(counter==1){//poslednie bukowki odinakowie schtobi sapisalas nado eto
+            sb.append(str.charAt(str.length()-1));
+        }else{
+            sb.append(counter).append(str.charAt(str.length()-1));
+        }
+        return sb.toString();                       //4a2b4cd
     }
 
 
